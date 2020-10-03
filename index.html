@@ -1,0 +1,108 @@
+<!--
+    Javascript calculator for PWM LED dimming curves
+    Copyright (C) 2020 David Young
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>PWM Dimming Curve Calculator</title>
+	<script type="text/javascript" src="calculator.js"></script>
+
+	<!-- following two scripts are needed for mathjax to display the
+		curves
+		Ref: https://www.mathjax.org/#gettingstarted
+	-->
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6">
+	</script>
+	<script
+		id="MathJax-script"
+		async
+		src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+	</script>
+
+	<!-- Apex Charts was chosen arbitrarily from the dozens of identical-
+		looking chart libraries out there. I couldn't work out why there
+		have to be so many or what makes them different.
+	-->
+	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body>
+	<h1>PWM Dimming Curve Calculator</h1>
+	<p>
+		<a href="https://github.com/sciguy16/pwm-curve-calculator">
+			https://github.com/sciguy16/pwm-curve-calculator
+		</a>
+	</p>
+	<p>
+		Input shortcuts:
+		<input type="button" value="Percent" onclick="shortcutIn(100);" />
+		<input type="button" value="8-bit" onclick="shortcutIn(0xff);" />
+		<input type="button" value="12-bit" onclick="shortcutIn(0xfff);" />
+		<input type="button" value="16-bit" onclick="shortcutIn(0xffff);" />
+	<p>
+		PWM shortcuts:
+		<input type="button" value="8-bit" onclick="shortcutOut(0xff);" />
+		<input type="button" value="12-bit" onclick="shortcutOut(0xfff);" />
+		<input type="button" value="16-bit" onclick="shortcutOut(0xffff);" />
+	</p>
+	<p>
+		Number of steps:
+			<input type="number" id="input_steps" value="100" />
+	</p>
+	<p>
+		Output number is
+			<input type="number" id="output_min" value="0" />
+		to
+			<input type="number" id="output_max" value="255" />
+	</p>
+	<p>
+		Dimming curve:
+		<select id="curve_select">
+			<option>exponential</option>
+			<option>quadratic</option>
+			<option>linear</option>
+		</select>
+	</p>
+	<p>
+		Output format:
+		<select id="output_format">
+			<option>C</option>
+			<option>Rust</option>
+			<option>List</option>
+		</select>
+	</p>
+	<p>
+		<input type="button" value="Calculate!" onclick="calculate();" />
+	</p>
+	<p>
+		Curves:
+		<ol>
+			<li>Exponential: \(y = 2^{x/r} - 1\)</li>
+			<li>Quadratic: <i>not implemented</i></li>
+			<li>Linear: <i>not implemented</i></li>
+		</ol>
+	</p>
+	<p>
+		Calculated curve:
+		<div id="calculated_curve">
+		</div>
+	</p>
+	<p>
+		Graph:
+		<div id="chart"></div>
+	</p>
+</body>
+</html>
